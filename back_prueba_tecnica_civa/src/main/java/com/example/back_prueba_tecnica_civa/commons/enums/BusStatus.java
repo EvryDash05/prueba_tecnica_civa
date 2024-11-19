@@ -4,12 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum BusStatus {
-    ACTIVE("Activo"),
-    INACTIVE("Inactivo");
-
-    private final String value;
-
-    BusStatus(String value) {
-        this.value = value;
-    }
+    Activo,
+    Inactivo;
 }
