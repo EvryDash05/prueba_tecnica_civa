@@ -4,6 +4,9 @@ import com.example.back_prueba_tecnica_civa.commons.constants.DatabaseConstants;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @Entity
@@ -19,5 +22,12 @@ public class RoleEntity {
 
     @Column(name = DatabaseConstants.ROLE_NAME, nullable = false, length = 30, unique = true)
     private String roleName;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = DatabaseConstants.ROLE_AUTHORITY_TABLE,
+            joinColumns = @JoinColumn(name = DatabaseConstants.ROLE_AUTHORITY_ROLE_ID),
+            inverseJoinColumns = @JoinColumn(name = DatabaseConstants.ROLE_AUTHORITY_AUTHORITY_ID)
+    )
+    private Set<AuthorityEntity> authorities = new HashSet<>();
 
 }
