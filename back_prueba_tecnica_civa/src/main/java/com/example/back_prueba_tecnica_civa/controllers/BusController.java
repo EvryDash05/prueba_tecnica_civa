@@ -16,19 +16,19 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/bus")
+@RequestMapping("/api/v1")
 public class BusController {
 
     private final BusService busService;
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/findAll")
+    @GetMapping("/bus")
     public ResponseEntity<List<BusResponse>> findAll(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(busService.getAllBuses(pageable));
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    @GetMapping("/findById/{busId}")
+    @GetMapping("/bus/{busId}")
     public ResponseEntity<BusResponse> findById(@PathVariable Integer busId) {
         return ResponseEntity.ok(busService.getBusById(busId));
     }
