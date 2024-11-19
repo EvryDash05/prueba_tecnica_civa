@@ -36,8 +36,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
+                    http.requestMatchers(PUBLIC_URLS).permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll();
-                    http.requestMatchers(PUBLIC_URLS).permitAll().anyRequest().authenticated();
+                    http.anyRequest().authenticated();
                 })
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
@@ -75,7 +76,7 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_URLS = {
             "/v3/api-docs/**",
-            "/swagger-ui./**",
+            "/swagger-ui/**",
             "/swagger-ui.html/**",
             "/auth/**",
     };
