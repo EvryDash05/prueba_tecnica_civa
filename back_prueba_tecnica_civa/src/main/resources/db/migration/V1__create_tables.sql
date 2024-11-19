@@ -1,3 +1,17 @@
+CREATE TABLE IF NOT EXISTS tb_authorities
+(
+    authority_id VARCHAR(6)  NOT NULL,
+    authority    VARCHAR(50) NOT NULL UNIQUE,
+    PRIMARY KEY (authority_id)
+);
+
+INSERT INTO tb_authorities(authority_id, authority)
+VALUES ('AUT001', 'READ'),
+       ('AUT002', 'CREATE'),
+       ('AUT003', 'UPDATE'),
+       ('AUT004', 'DELETE'),
+       ('AUT005', 'REFACTOR');
+
 CREATE TABLE IF NOT EXISTS tb_brand
 (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,3 +72,22 @@ CREATE TABLE IF NOT EXISTS user_role (
     CONSTRAINT fk_user_role_user_id FOREIGN KEY (user_id) REFERENCES tb_user(user_id),
     CONSTRAINT fk_user_role_role_id FOREIGN KEY (role_id) REFERENCES tb_role(role_id)
 );
+
+CREATE TABLE IF NOT EXISTS role_authority
+(
+    role_id      VARCHAR(6) NOT NULL,
+    authority_id VARCHAR(6) NOT NULL,
+    PRIMARY KEY (role_id, authority_id),
+    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES tb_role(role_id),
+    CONSTRAINT fk_authority FOREIGN KEY (authority_id) REFERENCES tb_authorities(authority_id)
+);
+
+/*INSERT ROWS IN TABLE role_authority*/
+INSERT INTO role_authority (role_id, authority_id)
+VALUES ('RLE001', 'AUT001'), -- Rol ADMIN has authority READ
+       ('RLE001', 'AUT002'), -- Rol ADMIN has authority CREATE
+       ('RLE001', 'AUT003'), -- Rol ADMIN has authority UPDATE
+       ('RLE001', 'AUT004'), -- Rol ADMIN has authority DELETE
+       ('RLE002', 'AUT001'), -- Rol USER has authority READ
+       ('RLE002', 'AUT002'), -- Rol USER has authority CREATE
+       ('RLE002', 'AUT003'); -- Rol USER has authority UPDATE
