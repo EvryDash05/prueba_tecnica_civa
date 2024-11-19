@@ -35,6 +35,20 @@ public abstract class DatabaseConstants {
     public static final String ROLE_NAME = "role_name";
 
     /**
+     * <h2>Authority table 🛢</h2>
+     */
+    public static final String AUTHORITIES_TABLE = "tb_authorities";
+    public static final String AUTHORITIES_ID = "authority_id";
+    public static final String AUTHORITIES_NAME = "authority";
+
+    /**
+     * <h2>Role-Authority table 🛢</h2>
+     */
+    public static final String ROLE_AUTHORITY_TABLE = "role_authority";
+    public static final String ROLE_AUTHORITY_ROLE_ID = "role_id";
+    public static final String ROLE_AUTHORITY_AUTHORITY_ID = "authority_id";
+
+    /**
      * <h2>Customer table 🛢</h2>
      */
     /* Property for the table name of "tb_user" */
