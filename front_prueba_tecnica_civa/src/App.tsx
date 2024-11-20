@@ -1,34 +1,60 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import BusPage from './pages/BusPage.tsx'
+import RegisterPage from './pages/Register.tsx'
+import LoginPage from './pages/Login.tsx'
+import Credentials from './types/credentials.ts'
+import '../public/css/customHeader.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = (): JSX.Element => {
+
+  const [credentials, setCredentials] = useState<Credentials | null>(null)
+
+  useEffect(() => {
+    const credentials = localStorage.getItem('credentials')
+    if (credentials) {
+      setCredentials(JSON.parse(credentials))
+    }
+  }, [])
+
+  const logout = () => {
+    localStorage.clear()
+    window.location.reload()
+  }
+
+  const roles = credentials?.roles
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Router>
+      <header className="header">
+        <nav className="nav">
+          {(roles?.includes('USER') || roles?.includes('ADMIN')) &&
+            <a href="/buses" className="nav-link">Lista de buses</a>
+          }
+          {(!roles) &&
+            <a href="/" className="nav-link">Iniciar Sesión</a>
+          }
+          {(!roles) &&
+            <a href="/register" className="nav-link">Registro</a>
+          }
+          {(roles?.includes('USER') || roles?.includes('ADMIN')) &&
+            <a href="/" className='nav-link' onClick={logout}>Cerrar Sesión</a>
+          }
+        </nav>
+      </header>
+
+      <Routes>
+        {(roles?.includes('ADMIN') || roles?.includes('USER')) &&
+          <Route path="/buses" element={<BusPage />} />
+        }
+        {(!roles) &&
+          <Route path="/" element={<LoginPage />} />
+        }
+        {(!roles) &&
+          <Route path="/register" element={<RegisterPage />} />
+        }
+      </Routes>
+    </Router>
   )
 }
 
