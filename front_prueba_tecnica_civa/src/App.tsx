@@ -17,8 +17,13 @@ const App: React.FC = (): JSX.Element => {
     }
   }, [])
 
+  const logout = () => {
+    localStorage.clear()
+    window.location.reload()
+  }
+
   const roles = credentials?.roles
-     
+
   return (
     <Router>
       <header className="header">
@@ -26,8 +31,15 @@ const App: React.FC = (): JSX.Element => {
           {(roles?.includes('USER') || roles?.includes('ADMIN')) &&
             <a href="/buses" className="nav-link">Lista de buses</a>
           }
-          <a href="/" className="nav-link">Iniciar Sesión</a>
-          <a href="/register" className="nav-link">Registro</a>
+          {(!roles) &&
+            <a href="/" className="nav-link">Iniciar Sesión</a>
+          }
+          {(!roles) &&
+            <a href="/register" className="nav-link">Registro</a>
+          }
+          {(roles?.includes('USER') || roles?.includes('ADMIN')) &&
+            <a href="/" className='nav-link' onClick={logout}>Cerrar Sesión</a>
+          }
         </nav>
       </header>
 
@@ -35,8 +47,12 @@ const App: React.FC = (): JSX.Element => {
         {(roles?.includes('ADMIN') || roles?.includes('USER')) &&
           <Route path="/buses" element={<BusPage />} />
         }
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {(!roles) &&
+          <Route path="/" element={<LoginPage />} />
+        }
+        {(!roles) &&
+          <Route path="/register" element={<RegisterPage />} />
+        }
       </Routes>
     </Router>
   )
