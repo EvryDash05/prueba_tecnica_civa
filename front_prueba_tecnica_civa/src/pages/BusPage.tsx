@@ -80,7 +80,7 @@ const TableBusRow: React.FC<{ bus: Bus }> = ({ bus }): JSX.Element => {
             <td>{bus.features}</td>
             <td>{bus.brand}</td>
             <td>{bus.status}</td>
-            <tb><button onClick={viewInfo}>Ver info</button></tb>
+            <td><button onClick={viewInfo}>Ver info</button></td>
         </tr>
     )
 }
