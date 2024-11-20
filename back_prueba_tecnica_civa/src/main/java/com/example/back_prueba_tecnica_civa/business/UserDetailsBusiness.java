@@ -83,10 +83,10 @@ public class UserDetailsBusiness implements UserDetailsService {
         String accessToken = jwtUtils.createToken(auth);
 
         return AuthResponse.builder()
-                .username(username)
-                .lastName(createUserRequest.getLastName())
-                .email(createUserRequest.getEmail())
-                .message("User created successfully")
+                .userId(userSaved.getCustomerId())
+                .username(userSaved.getUsername())
+                .email(userSaved.getEmail())
+                .message("Login successfully")
                 .token(accessToken)
                 .build();
     }
@@ -99,12 +99,23 @@ public class UserDetailsBusiness implements UserDetailsService {
         Authentication authentication = this.authenticate(email, password);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String accessToken = jwtUtils.createToken(authentication);
-        return AuthResponse.builder()
-                .email(email)
-                .message("Login successfully")
-                .token(accessToken)
-                .build();
+        if(authentication.isAuthenticated()) {
+            Optional<UserEntity> customerEntity = this.userRepository.findByEmail(email);
+            List<String> roles = customerEntity.get().getRoles()
+                    .stream().map(RoleEntity::getRoleName).toList();
+            String accessToken = jwtUtils.createToken(authentication);
+
+            return AuthResponse.builder()
+                    .userId(customerEntity.get().getCustomerId())
+                    .username(customerEntity.get().getUsername())
+                    .email(email)
+                    .roles(roles)
+                    .message("Login successfully")
+                    .token(accessToken)
+                    .build();
+        }
+
+        return null;
     }
 
     public Authentication authenticate(String email, String password) {
