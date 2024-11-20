@@ -20,6 +20,7 @@ const RegisterPage: React.FC = (): JSX.Element => {
         if (response) {
             const body = await response.json()
             console.log(body)
+            window.location.href = '/'
         }
 
     }

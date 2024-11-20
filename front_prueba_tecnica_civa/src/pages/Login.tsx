@@ -23,6 +23,7 @@ const LoginPage: React.FC = (): JSX.Element => {
             if (response.ok) {
                 const credentials = await response.json()
                 localStorage.setItem('credentials', JSON.stringify(credentials))
+                window.location.href = '/buses'
             }
 
         } catch (e) {
