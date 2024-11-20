@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/Home.tsx'
+import BusPage from './pages/BusPage.tsx'
 import RegisterPage from './pages/Register.tsx'
 import LoginPage from './pages/Login.tsx'
-import CustomHeader from './components/CustomHeader.tsx'
 import Credentials from './types/credentials.ts'
-import BusPage from './pages/BusPage.tsx'
+import '../public/css/customHeader.css'
 
 const App: React.FC = (): JSX.Element => {
 
@@ -19,13 +18,23 @@ const App: React.FC = (): JSX.Element => {
   }, [])
 
   const roles = credentials?.roles
-  console.log(roles)
-
+     
   return (
     <Router>
-      <CustomHeader />
+      <header className="header">
+        <nav className="nav">
+          {(roles?.includes('USER') || roles?.includes('ADMIN')) &&
+            <a href="/buses" className="nav-link">Lista de buses</a>
+          }
+          <a href="/" className="nav-link">Iniciar Sesión</a>
+          <a href="/register" className="nav-link">Registro</a>
+        </nav>
+      </header>
+
       <Routes>
-        {roles?.includes('ADMIN') || roles?.includes('USER') && <Route path="/admin" element={<BusPage />} />}
+        {(roles?.includes('ADMIN') || roles?.includes('USER')) &&
+          <Route path="/buses" element={<BusPage />} />
+        }
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>
